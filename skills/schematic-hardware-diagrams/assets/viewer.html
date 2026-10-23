@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="@@LANG@@" dir="@@DIR@@" data-theme="@@THEME@@">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="generator" content="Schematic to Blocks">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; base-uri 'none'; form-action 'none'">
+<title>@@TITLE@@</title>
+<style>@@CSS@@</style>
+</head>
+<body data-details="open">
+<header class="topbar">
+  <div class="identity">
+    <svg class="identity-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="8" y="8" width="16" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 3v5m8-5v5M12 24v5m8-5v5M3 12h5m-5 8h5m16-8h5m-5 8h5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+    <div><h1>@@TITLE@@</h1><p class="product">SCHEMATIC TO BLOCKS</p></div>
+  </div>
+  <div class="actions" role="toolbar">
+    <button id="theme" type="button"></button><button id="motion" type="button" aria-pressed="false"></button>
+    <button id="present" type="button"></button><button id="reset" type="button"></button>
+    <button id="export" type="button" aria-expanded="false" aria-controls="export-menu"></button>
+  </div>
+</header>
+<p class="summary-line" id="intro"></p>
+<div class="viewbar"><nav class="module-nav" id="module-nav" aria-label="@@PAGES@@"></nav><select id="pages" aria-label="@@PAGES@@"></select><span id="counts" class="counts"></span></div>
+<main class="workspace">
+  <section class="stage" aria-label="@@CANVAS@@">
+    <div id="canvas"></div>
+    <div class="legend" id="legend"></div>
+    <div class="canvas-tools" role="toolbar"><button id="zoom-out" type="button">−</button><button id="fit" type="button">100%</button><button id="zoom-in" type="button">+</button></div>
+  </section>
+  <aside>
+    <div class="search-box"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8" cy="8" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m12 12 5 5" stroke="currentColor" stroke-width="1.5"/></svg><input id="search" placeholder="@@SEARCH@@" aria-label="@@SEARCH@@"></div>
+    <div class="card-head"><button class="close" id="close" type="button">×</button><div class="eyebrow" id="card-kind"></div><h2 id="card-title"></h2><p class="model" id="summary"></p></div>
+    <div class="card-actions"><button id="focus" type="button" disabled></button><button id="up" type="button" disabled></button><button id="down" type="button" disabled></button></div>
+    <div id="details"></div>
+  </aside>
+</main>
+<footer class="statusbar"><p id="status"></p><p id="hint"></p></footer>
+<div id="export-menu" class="export-menu" hidden><button id="exportSvg" type="button"></button><button id="exportPng" type="button"></button><button id="print" type="button"></button></div>
+<script type="application/json" id="document">@@DATA@@</script>
+<script>@@SCRIPT@@</script>
+</body>
+</html>

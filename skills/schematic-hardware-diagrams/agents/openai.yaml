@@ -1,0 +1,6 @@
+interface:
+  display_name: "Schematic Hardware Diagrams"
+  short_description: "Analyze schematics and draw clear hardware diagrams"
+  default_prompt: "Use $schematic-hardware-diagrams to analyze this schematic and create an interactive hardware overview plus module diagrams in the language of my request."
+policy:
+  allow_implicit_invocation: true

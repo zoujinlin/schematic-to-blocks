@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.venv/
+.candidate-*/
+.schematic-to-blocks/
+tmp/
+output/
+dist/
+*.zip
+node_modules/
+.DS_Store

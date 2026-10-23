@@ -1,0 +1,12 @@
+{
+  "name": "schematic-to-blocks-dev",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Development-only DOM tests for the standalone hardware viewer",
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "linkedom": "0.18.14"
+  }
+}

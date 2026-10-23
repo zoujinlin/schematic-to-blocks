@@ -1,0 +1,4 @@
+reportlab>=4.0
+pdfplumber>=0.11
+pypdf>=4.0
+Pillow>=10.0

@@ -1,0 +1,640 @@
+{
+  "name": "example-hardware-architecture",
+  "locale": "zh-Hans",
+  "title": "合成信号采集接口",
+  "pages": [
+    {
+      "slug": "00-overview",
+      "title": "硬件架构总览",
+      "subtitle": "合成示例：信号采集、数字隔离、主控接口与电源分配。",
+      "groups": [
+        {
+          "id": "board",
+          "x": 360,
+          "y": 180,
+          "w": 820,
+          "h": 800,
+          "title": "接口板",
+          "dash": true
+        }
+      ],
+      "nodes": [
+        {
+          "id": "sensor",
+          "x": 40,
+          "y": 300,
+          "w": 260,
+          "h": 220,
+          "title": "传感器输入",
+          "model": "J1",
+          "lines": [
+            "差分输入",
+            "外部设备"
+          ],
+          "kind": "external",
+          "details": {
+            "function": "引入外部差分模拟信号。",
+            "principle": "连接器传输差分信号对；实际幅度及共模范围需结合源电路确认。",
+            "uncertainty": "合成器件示例；实际型号、引脚连接及配置仍需核实。"
+          },
+          "evidence": [
+            "synthetic-topology"
+          ]
+        },
+        {
+          "id": "acquisition",
+          "x": 410,
+          "y": 300,
+          "w": 310,
+          "h": 220,
+          "title": "信号采集",
+          "model": "U1 · ADC_GENERIC",
+          "lines": [
+            "信号调理",
+            "模数转换"
+          ],
+          "kind": "normal",
+          "details": {
+            "function": "完成外部模拟信号的调理与数字化。",
+            "principle": "模块框图进一步区分可编程增益、基准源及模数转换环节。",
+            "uncertainty": "合成器件示例；实际型号、引脚连接及配置仍需核实。"
+          },
+          "evidence": [
+            "synthetic-topology"
+          ]
+        },
+        {
+          "id": "isolation",
+          "x": 850,
+          "y": 300,
+          "w": 270,
+          "h": 220,
+          "title": "数字隔离",
+          "model": "U2 · ISO_GENERIC",
+          "lines": [
+            "隔离数据通道",
+            "配置传输"
+          ],
+          "kind": "interface",
+          "details": {
+            "function": "在电路域之间传输采样数据与配置。",
+            "principle": "数字隔离器跨隔离栅传输逻辑状态；供电分区和通道方向需由实际原理图确认。",
+            "uncertainty": "合成器件示例；实际型号、引脚连接及配置仍需核实。"
+          },
+          "evidence": [
+            "synthetic-topology"
+          ]
+        },
+        {
+          "id": "host",
+          "x": 1240,
+          "y": 300,
+          "w": 320,
+          "h": 220,
+          "title": "外部主控",
+          "model": "J2",
+          "lines": [
+            "采样数据处理",
+            "时序与配置"
+          ],
+          "kind": "external",
+          "details": {
+            "function": "接收转换结果并配置采集电路。",
+            "principle": "外部控制器提供配置或时序并读取测量结果；未指定固件算法。",
+            "uncertainty": "合成器件示例；实际型号、引脚连接及配置仍需核实。"
+          },
+          "evidence": [
+            "synthetic-topology"
+          ],
+          "category": "control"
+        },
+        {
+          "id": "supply",
+          "x": 40,
+          "y": 770,
+          "w": 260,
+          "h": 150,
+          "title": "24V 电源输入",
+          "model": "J3",
+          "lines": [
+            "外部供电"
+          ],
+          "kind": "power_external",
+          "details": {
+            "function": "引入示例中的外部 24V 电源。",
+            "principle": "连接器向电源转换环节供电；输入保护和电压容差未在本例中定义。",
+            "uncertainty": "合成器件示例；实际型号、引脚连接及配置仍需核实。"
+          },
+          "evidence": [
+            "synthetic-topology"
+          ]
+        },
+        {
+          "id": "power",
+          "x": 410,
+          "y": 770,
+          "w": 710,
+          "h": 150,
+          "title": "电源分配",
+          "model": "U3 · DC/DC_GENERIC",
+          "lines": [
+            "稳压与隔离供电"
+          ],
+          "kind": "power",
+          "details": {
+            "function": "向采集及隔离电路分配稳压电源。",
+            "principle": "通用电源转换模块提供本地电源轨；具体电压、回流路径及隔离额定值未指定。",
+            "uncertainty": "合成器件示例；实际型号、引脚连接及配置仍需核实。"
+          },
+          "evidence": [
+            "synthetic-topology"
+          ]
+        }
+      ],
+      "junctions": [
+        {
+          "id": "left-tap",
+          "x": 550,
+          "y": 650,
+          "kind": "power"
+        },
+        {
+          "id": "feed",
+          "x": 760,
+          "y": 650,
+          "kind": "power"
+        },
+        {
+          "id": "right-tap",
+          "x": 950,
+          "y": 650,
+          "kind": "power"
+        }
+      ],
+      "edges": [
+        {
+          "source": "sensor",
+          "target": "acquisition",
+          "points": [
+            [
+              300,
+              410
+            ],
+            [
+              410,
+              410
+            ]
+          ],
+          "kind": "data",
+          "label": "",
+          "end_arrow": true,
+          "evidence": [
+            "synthetic-topology"
+          ]
+        },
+        {
+          "source": "acquisition",
+          "target": "isolation",
+          "points": [
+            [
+              720,
+              380
+            ],
+            [
+              850,
+              380
+            ]
+          ],
+          "kind": "data",
+          "label": "数据",
+          "end_arrow": true,
+          "evidence": [
+            "synthetic-topology"
+          ]
+        },
+        {
+          "source": "isolation",
+          "target": "host",
+          "points": [
+            [
+              1120,
+              380
+            ],
+            [
+              1240,
+              380
+            ]
+          ],
+          "kind": "data",
+          "label": "数据",
+          "end_arrow": true,
+          "evidence": [
+            "synthetic-topology"
+          ]
+        },
+        {
+          "source": "host",
+          "target": "isolation",
+          "points": [
+            [
+              1240,
+              470
+            ],
+            [
+              1120,
+              470
+            ]
+          ],
+          "kind": "control",
+          "label": "配置",
+          "end_arrow": true,
+          "evidence": [
+            "synthetic-topology"
+          ]
+        },
+        {
+          "source": "isolation",
+          "target": "acquisition",
+          "points": [
+            [
+              850,
+              470
+            ],
+            [
+              720,
+              470
+            ]
+          ],
+          "kind": "control",
+          "label": "配置",
+          "end_arrow": true,
+          "evidence": [
+            "synthetic-topology"
+          ]
+        },
+        {
+          "source": "supply",
+          "target": "power",
+          "points": [
+            [
+              300,
+              845
+            ],
+            [
+              410,
+              845
+            ]
+          ],
+          "kind": "power",
+          "label": "24V",
+          "end_arrow": true,
+          "evidence": [
+            "synthetic-topology"
+          ]
+        },
+        {
+          "source": "power",
+          "target": "feed",
+          "points": [
+            [
+              760,
+              770
+            ],
+            [
+              760,
+              650
+            ]
+          ],
+          "kind": "power",
+          "label": "",
+          "end_arrow": false,
+          "evidence": [
+            "synthetic-topology"
+          ]
+        },
+        {
+          "source": "left-tap",
+          "target": "feed",
+          "points": [
+            [
+              550,
+              650
+            ],
+            [
+              760,
+              650
+            ]
+          ],
+          "kind": "power",
+          "label": "",
+          "end_arrow": false,
+          "evidence": [
+            "synthetic-topology"
+          ]
+        },
+        {
+          "source": "feed",
+          "target": "right-tap",
+          "points": [
+            [
+              760,
+              650
+            ],
+            [
+              950,
+              650
+            ]
+          ],
+          "kind": "power",
+          "label": "",
+          "end_arrow": false,
+          "evidence": [
+            "synthetic-topology"
+          ]
+        },
+        {
+          "source": "left-tap",
+          "target": "acquisition",
+          "points": [
+            [
+              550,
+              650
+            ],
+            [
+              550,
+              520
+            ]
+          ],
+          "kind": "power",
+          "label": "",
+          "end_arrow": true,
+          "evidence": [
+            "synthetic-topology"
+          ]
+        },
+        {
+          "source": "right-tap",
+          "target": "isolation",
+          "points": [
+            [
+              950,
+              650
+            ],
+            [
+              950,
+              520
+            ]
+          ],
+          "kind": "power",
+          "label": "",
+          "end_arrow": true,
+          "evidence": [
+            "synthetic-topology"
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "text": "本图仅为合成示例，通用器件标识不代表已验证电路或器件推荐。",
+          "y": 1090
+        }
+      ]
+    },
+    {
+      "slug": "01-acquisition",
+      "title": "模块：信号采集",
+      "subtitle": "功能链包含独立基准源；器件标识仅用于说明。",
+      "nodes": [
+        {
+          "id": "input",
+          "x": 40,
+          "y": 350,
+          "w": 240,
+          "h": 240,
+          "title": "模拟输入",
+          "model": "J1",
+          "lines": [
+            "差分信号"
+          ],
+          "kind": "external",
+          "details": {
+            "function": "传输差分模拟输入。",
+            "principle": "差分信号对连接增益调整环节；实际电路需检查共模范围和输入保护。",
+            "uncertainty": "合成器件示例；实际型号、引脚连接及配置仍需核实。"
+          },
+          "evidence": [
+            "synthetic-topology"
+          ]
+        },
+        {
+          "id": "pga",
+          "x": 350,
+          "y": 350,
+          "w": 270,
+          "h": 240,
+          "title": "增益调整",
+          "model": "U4 · PGA_GENERIC",
+          "lines": [
+            "可编程增益",
+            "差分输出"
+          ],
+          "kind": "normal",
+          "details": {
+            "function": "在模数转换前调整输入信号增益。",
+            "principle": "可编程增益电路缩放差分信号，使其适配转换器输入范围；本例未规定增益数值。",
+            "uncertainty": "合成器件示例；实际型号、引脚连接及配置仍需核实。"
+          },
+          "evidence": [
+            "synthetic-topology"
+          ]
+        },
+        {
+          "id": "adc",
+          "x": 700,
+          "y": 350,
+          "w": 320,
+          "h": 240,
+          "title": "模数转换",
+          "model": "U1 · ADC_GENERIC",
+          "lines": [
+            "采样与转换",
+            "数字输出滤波"
+          ],
+          "kind": "normal",
+          "details": {
+            "function": "将调理后的模拟信号转换为数字采样值。",
+            "principle": "转换器以基准为量化尺度输出数字码；架构、分辨率、采样率和滤波特性由实际型号确定。",
+            "uncertainty": "合成器件示例；实际型号、引脚连接及配置仍需核实。"
+          },
+          "evidence": [
+            "synthetic-topology"
+          ]
+        },
+        {
+          "id": "spi",
+          "x": 1200,
+          "y": 350,
+          "w": 360,
+          "h": 240,
+          "title": "主控接口",
+          "model": "J2 / SPI",
+          "lines": [
+            "转换数据传输",
+            "时钟与配置"
+          ],
+          "kind": "external",
+          "details": {
+            "function": "向主控传输数字转换结果。",
+            "principle": "SPI 为示例接口；时钟和配置线的实际连接应依据源原理图补充。",
+            "uncertainty": "合成器件示例；实际型号、引脚连接及配置仍需核实。"
+          },
+          "evidence": [
+            "synthetic-topology"
+          ],
+          "category": "control"
+        },
+        {
+          "id": "reference",
+          "x": 700,
+          "y": 760,
+          "w": 320,
+          "h": 150,
+          "title": "精密基准",
+          "model": "U5 · REF_GENERIC",
+          "lines": [],
+          "kind": "reference",
+          "details": {
+            "function": "提供模数转换所需的稳定基准。",
+            "principle": "基准源确定转换器的测量尺度；实际基准电压和误差预算未在本例中指定。",
+            "uncertainty": "合成器件示例；实际型号、引脚连接及配置仍需核实。"
+          },
+          "evidence": [
+            "synthetic-topology"
+          ]
+        }
+      ],
+      "edges": [
+        {
+          "source": "input",
+          "target": "pga",
+          "points": [
+            [
+              280,
+              470
+            ],
+            [
+              350,
+              470
+            ]
+          ],
+          "kind": "data",
+          "label": "",
+          "end_arrow": true,
+          "evidence": [
+            "synthetic-topology"
+          ]
+        },
+        {
+          "source": "pga",
+          "target": "adc",
+          "points": [
+            [
+              620,
+              470
+            ],
+            [
+              700,
+              470
+            ]
+          ],
+          "kind": "data",
+          "label": "",
+          "end_arrow": true,
+          "evidence": [
+            "synthetic-topology"
+          ]
+        },
+        {
+          "source": "adc",
+          "target": "spi",
+          "points": [
+            [
+              1020,
+              470
+            ],
+            [
+              1200,
+              470
+            ]
+          ],
+          "kind": "data",
+          "label": "SPI",
+          "end_arrow": true,
+          "evidence": [
+            "synthetic-topology"
+          ]
+        },
+        {
+          "source": "reference",
+          "target": "adc",
+          "points": [
+            [
+              860,
+              760
+            ],
+            [
+              860,
+              590
+            ]
+          ],
+          "kind": "reference",
+          "label": "",
+          "end_arrow": true,
+          "evidence": [
+            "synthetic-topology"
+          ]
+        },
+        {
+          "source": "spi",
+          "target": "adc",
+          "kind": "control",
+          "label": "配置",
+          "points": [
+            [
+              1200,
+              550
+            ],
+            [
+              1020,
+              550
+            ]
+          ],
+          "evidence": [
+            "synthetic-topology"
+          ]
+        }
+      ],
+      "notes": [
+        {
+          "text": "实际转换器、基准、输入范围和共享控制信号必须由源原理图确认。",
+          "y": 1090
+        }
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "summary": "合成采集板示例：差分输入经过增益调整与模数转换，再通过数字隔离接口连接外部主控。器件标识仅用于说明功能。",
+  "unresolved": [
+    "本图为合成示例，未对应已验证产品电路；未规定精度、带宽或隔离额定值。"
+  ],
+  "evidence": [
+    {
+      "id": "synthetic-topology",
+      "source": "example.zh-Hans.json",
+      "basis": "synthetic",
+      "locator": "总览与信号采集模块",
+      "note": "合成功能拓扑，不包含实际项目原理图或器件选型结论。"
+    }
+  ],
+  "theme": "dark"
+}
