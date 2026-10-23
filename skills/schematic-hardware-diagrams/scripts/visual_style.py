@@ -34,8 +34,9 @@ SVG_CSS = '''
 .group-frame{fill:var(--group);stroke:var(--line)}.group-tag{fill:var(--bg);stroke:var(--line)}
 .node-card{fill:var(--node);stroke:var(--domain);stroke-opacity:.65;stroke-width:1.8}
 .kind-interface .node-card{fill:var(--interface)}.domain-power .node-card{fill:var(--powerfill)}
-.domain-reference .node-card{fill:var(--referencefill)}.node-icon{fill:none;stroke:var(--domain);stroke-width:1.8}
-.node-icon-bg{fill:var(--domain);fill-opacity:.09;stroke:var(--domain);stroke-opacity:.3}
+.domain-reference .node-card{fill:var(--referencefill)}
+.node-symbol{fill:none;stroke:var(--domain);stroke-width:1.8}
+.node-symbol .symbol-label{fill:var(--domain);stroke:none}
 .edge-shaft{fill:none;stroke:var(--domain);stroke-linejoin:round;stroke-linecap:butt}
 .edge-head{fill:var(--domain)}.edge-hit{fill:none;stroke:transparent;stroke-width:20;pointer-events:stroke}
 .edge-label-bg{fill:var(--bg);stroke:var(--domain);stroke-opacity:.35;stroke-width:1}

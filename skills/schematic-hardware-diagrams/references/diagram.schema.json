@@ -36,6 +36,7 @@
       "title": {"type": "string"}, "model": {"type": "string"}, "lines": {"$ref": "#/$defs/strings"},
       "kind": {"enum": ["normal", "external", "interface", "power", "power_external", "reference", "annotation", "optional"]},
       "category": {"enum": ["data", "control", "power", "reference"]},
+      "symbol": {"description": "Electrical symbol or functional notation selected from verified circuit function. Omitted means none; independent of kind, category, language and package.", "enum": ["none", "connector", "amplifier", "op-amp", "adc", "dac", "isolation", "dc-dc", "dc-source", "voltage-reference", "controller", "low-pass-filter", "clock", "resistor", "capacitor", "inductor", "switch"]},
       "evidence": {"$ref": "#/$defs/refs"},
       "details": {"type": "object", "additionalProperties": false, "properties": {
         "function": {"type": "string"}, "principle": {"type": "string"}, "interfaces": {"$ref": "#/$defs/strings"},

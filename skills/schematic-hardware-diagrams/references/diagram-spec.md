@@ -12,8 +12,8 @@ The bundled standard-library validator implements the keyword subset used by thi
   "pages": [{
     "slug": "00-overview", "title": "Architecture overview", "subtitle": "Signal flow",
     "nodes": [
-      {"id": "input", "x": 60, "y": 300, "w": 320, "h": 190, "title": "Sensor input", "model": "J1", "lines": ["Differential signal"], "kind": "external"},
-      {"id": "adc", "x": 600, "y": 300, "w": 360, "h": 190, "title": "Acquisition", "model": "U1 · ADC_MODEL", "lines": ["Conversion and filtering"]}
+      {"id": "input", "x": 60, "y": 300, "w": 320, "h": 190, "title": "Sensor input", "model": "J1", "lines": ["Differential signal"], "kind": "external", "symbol": "connector"},
+      {"id": "adc", "x": 600, "y": 300, "w": 360, "h": 190, "title": "Acquisition", "model": "U1 · ADC_MODEL", "lines": ["Conversion and filtering"], "symbol": "adc"}
     ],
     "edges": [{"source": "input", "target": "adc", "points": [[380,395],[600,395]], "kind": "data", "label": "Analog"}]
   }]
@@ -26,6 +26,7 @@ The bundled standard-library validator implements the keyword subset used by thi
 - Page: unique `slug`, `title`, `subtitle`, arrays below. Keep provenance in a separate evidence record or non-rendered metadata.
 - Node: `id/x/y/w/h/title`, optional `model/lines/kind`. Kinds: `normal`, `external`, `interface`, `power`, `power_external`, `reference`, `annotation`, `optional`. Uncertainty needs explicit prose, not only a dashed frame.
 - Optional node `category`: `data/control/power/reference` for its semantic color; otherwise derived from power/reference kind or defaults to data. SVG nodes and edges use stable `data-node` / `data-edge` group identities; do not reconstruct the graph from drawing order.
+- Optional node `symbol`: a stable function ID from [electrical-symbols.md](electrical-symbols.md). Omission or `none` renders no symbol. Unknown IDs fail validation, including in the low-level renderer. Select from the circuit's verified function; labels, device references, kind and category do not select a symbol. The symbol reserves a 44 × 32 area beside the title; titles wrap within the remaining width. Keep enough block height for any extra title lines. HTML/SVG/PDF and editable draw.io stencils share the same geometry. draw.io symbols and text are children of the node, so moving the block preserves their placement and bound external connections.
 - Node `details`: localized `function` and `principle` strings, `interfaces` and `power` string arrays, and `uncertainty` string. These form the HTML device card. `evidence` arrays on nodes/edges refer to top-level evidence IDs.
 - Top-level `evidence`: records with unique `id`, `source` (basename or manufacturer URL), `basis` (`schematic/netlist/datasheet/inferred/ocr-candidate/synthetic`), optional `page`, `locator`, `note`. File-based schematic/netlist/OCR records require exact source `sha256`; locators retain page region, symbol UUID or net/pins. Synthetic examples must be labeled synthetic. Inferences remain explicitly marked even when they reference a source hash.
 - Group: `x/y/w/h/title`, optional `id/fill/dash`. An identified group can intentionally receive a shared service.

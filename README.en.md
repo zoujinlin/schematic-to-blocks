@@ -48,6 +48,10 @@ Works with Codex and agents that load `SKILL.md`. Explanations follow the reques
 
 Data, control, power and reference use distinct colors. Power is red; legend text matches each connection category. Solid arrow tips meet the block borders.
 
+Module identifiers follow the actual circuit function. Gain stages use amplifier triangles; op amps include non-inverting/inverting inputs. ADCs and DACs use A/D and D/A notation, digital isolators show an isolation barrier, DC/DC stages show DC conversion, and connectors use contact symbols. References and controllers use REF and CTRL functional notation.
+
+Select symbols from schematic and device evidence. Symbol identities stay consistent across languages and themes. HTML, SVG, PDF and draw.io share vector geometry; draw.io symbols move with their parent module and support shape editing. Unresolved functions or unavailable symbols retain clear text captions. Actual references, pins, channel directions and isolation ratings remain evidence-based. [Selection rules and full symbol list](skills/schematic-hardware-diagrams/references/electrical-symbols.md).
+
 ## Explore and export
 
 One authored diagram, two themes. Pan, zoom, focus and trace relationships locally.
@@ -126,7 +130,7 @@ Inventory and geometry do not constitute complete net solving. Pin transforms, h
 |---|---|
 | Extract evidence | Source SHA256, component inventory and page/symbol/net locators |
 | Analyze circuits | Separate schematic facts, manufacturer documentation, inference and open questions |
-| Author diagram data | JSON nodes, interfaces, supplies, evidence and layout |
+| Author diagram data | JSON nodes, electrical symbols, interfaces, supplies, evidence and layout |
 | Validate | Endpoints, device crossings, junctions, overflow, labels and glyphs |
 | Deliver and inspect | Standalone HTML and requested formats, followed by visual review |
 
@@ -141,7 +145,7 @@ npm ci --ignore-scripts
 python -m unittest discover -s skills/schematic-hardware-diagrams/tests -v
 ```
 
-Node.js and the DOM parser are development-only. Generated HTML requires no external JavaScript or CSS. Tests cover format extraction, evidence, language, geometry, themes, zoom, pan, focus, full-graph export and failed-delivery recovery. Automated checks still require visual and electrical review.
+Node.js and the DOM parser are development-only. Generated HTML requires no external JavaScript or CSS. Tests cover format extraction, evidence, language, function-specific symbols across export formats, geometry, themes, zoom, pan, focus, full-graph export and failed-delivery recovery. Automated checks still require visual and electrical review.
 
 ## License
 

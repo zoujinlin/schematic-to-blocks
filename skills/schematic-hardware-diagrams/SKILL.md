@@ -3,7 +3,7 @@ name: schematic-hardware-diagrams
 description: Analyze electronic schematics from PDF, scanned images, KiCad, EAGLE XML or EasyEDA Std JSON, then create a hardware overview and module block diagrams explaining device models, operating principles, functions, interfaces and power domains. Use for hardware project onboarding and diagram revisions; adapt output language to the user's request.
 license: MIT
 metadata:
-  version: "0.1.0"
+  version: "0.1.1"
 ---
 
 # Schematic Hardware Diagrams
@@ -44,12 +44,14 @@ Build a component inventory and trace actual signal, control, power and referenc
 2. Draw one view per meaningful module: its input/output chain, controls, power/reference connections and significant branches/cascades. Choose page count from circuit complexity.
 3. Include exact key models/references, function and operating principle. Use short visible captions and detail cards for longer explanations; resistor-level detail only when topology explains operation.
 4. Put evidence IDs on nodes/edges. Top-level `evidence` records retain file SHA256, page/region or symbol/net locator. Show evidence in cards and records; omit source-text footers.
+5. Select each node's `symbol` from its actual circuit function and evidence. Use electrical symbols for amplifiers/sources/passives and recognized functional notation for converters/controllers. Read [electrical-symbols.md](references/electrical-symbols.md) for the supported vocabulary and selection rules. A connector, ADC and power converter must not share a decorative chip icon. Do not infer symbols from part packages, translated titles, `kind` or color. At overview level identify the principal function; split distinct functions in module views. Leave `symbol: "none"` with an accurate function caption when evidence or a suitable symbol is unavailable; never substitute a symbol for a different function.
 
 Follow [diagram-spec.md](references/diagram-spec.md) and [diagram.schema.json](references/diagram.schema.json). [example.en.json](assets/example.en.json) supplies a synthetic overview/module layout; replace its illustrative evidence with actual project records. Preserve the JSON for revisions.
 
 Visual defaults, adjustable to the user's request:
 
 - Use a technical grid canvas, restrained layer boundaries, rounded device cards and compact connection labels. The default dark theme and printable light theme share geometry and semantic SVG layers. Do not embed a static report page as the only interactive view.
+- Render function symbols from the shared vector definitions across HTML/SVG, PDF and editable draw.io stencils. Preserve the same symbol ID across translations and theme changes. These compact function identifiers do not establish actual pin count, pin order, channel direction or isolation rating; retain such facts in the circuit view and evidence.
 - Data/status blue, control/configuration orange, **power red**, reference/bias purple. Light-theme tokens are `#126CA6`, `#A36700`, `#C62828`, `#7953A0`; dark tokens raise contrast while retaining the same categories. Each legend caption matches its color and names the category.
 - Orthogonal connections and prominent solid triangular heads. The pointed apex meets the destination border; the shaft stops at the triangle base.
 - Bind each endpoint to a node/group border or explicit junction. Keep labels clear of lines, arrowheads, rectangles and text. Use dots for bus branches.

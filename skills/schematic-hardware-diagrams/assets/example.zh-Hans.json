@@ -39,7 +39,8 @@
           },
           "evidence": [
             "synthetic-topology"
-          ]
+          ],
+          "symbol": "connector"
         },
         {
           "id": "acquisition",
@@ -61,7 +62,8 @@
           },
           "evidence": [
             "synthetic-topology"
-          ]
+          ],
+          "symbol": "adc"
         },
         {
           "id": "isolation",
@@ -83,7 +85,8 @@
           },
           "evidence": [
             "synthetic-topology"
-          ]
+          ],
+          "symbol": "isolation"
         },
         {
           "id": "host",
@@ -106,7 +109,8 @@
           "evidence": [
             "synthetic-topology"
           ],
-          "category": "control"
+          "category": "control",
+          "symbol": "controller"
         },
         {
           "id": "supply",
@@ -127,7 +131,8 @@
           },
           "evidence": [
             "synthetic-topology"
-          ]
+          ],
+          "symbol": "connector"
         },
         {
           "id": "power",
@@ -148,7 +153,8 @@
           },
           "evidence": [
             "synthetic-topology"
-          ]
+          ],
+          "symbol": "dc-dc"
         }
       ],
       "junctions": [
@@ -424,7 +430,8 @@
           },
           "evidence": [
             "synthetic-topology"
-          ]
+          ],
+          "symbol": "connector"
         },
         {
           "id": "pga",
@@ -446,7 +453,8 @@
           },
           "evidence": [
             "synthetic-topology"
-          ]
+          ],
+          "symbol": "amplifier"
         },
         {
           "id": "adc",
@@ -468,7 +476,8 @@
           },
           "evidence": [
             "synthetic-topology"
-          ]
+          ],
+          "symbol": "adc"
         },
         {
           "id": "spi",
@@ -491,7 +500,8 @@
           "evidence": [
             "synthetic-topology"
           ],
-          "category": "control"
+          "category": "control",
+          "symbol": "connector"
         },
         {
           "id": "reference",
@@ -510,7 +520,8 @@
           },
           "evidence": [
             "synthetic-topology"
-          ]
+          ],
+          "symbol": "voltage-reference"
         }
       ],
       "edges": [

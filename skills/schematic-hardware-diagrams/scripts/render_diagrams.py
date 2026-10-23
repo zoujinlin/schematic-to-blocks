@@ -23,6 +23,7 @@ from reportlab.lib.colors import HexColor
 from localization import detect_locale, normalize_locale, get_legend, needs_shaping, is_rtl
 from html_viewer import build as build_html
 from visual_style import THEMES, SVG_CSS, theme_css, category
+from electrical_symbols import geometry as symbol_geometry, svg_elements, pdf_symbol, drawio_shape, WIDTH as SYMBOL_WIDTH, HEIGHT as SYMBOL_HEIGHT, STROKE_WIDTH as SYMBOL_STROKE
 
 W,H=1600,1200
 THEME='dark'
@@ -47,7 +48,9 @@ def all_text(document):
     values=[document.get('title','')]+list(LEGEND.values())
     for page in D:
         values.extend([page['title'],page['subtitle']])
-        for node in page['nodes']:values.extend([node['title'],node['model']]+node['lines'])
+        for node in page['nodes']:
+            values.extend([node['title'],node['model']]+node['lines'])
+            values.extend(p['value'] for p in symbol_geometry(node.get('symbol','none')) if p['tag']=='text')
         for group in page['groups']:values.append(group['title'])
         for edge in page['edges']:values.append(edge['label'])
         values.extend(t['text'] for t in page['texts'])
@@ -115,6 +118,9 @@ def load_document(raw):
             for key in ('id','x','y','w','h','title'):
                 if key not in n:raise ValueError(f'{slug}: node needs {key}')
             n.setdefault('kind','normal');n.setdefault('model','');n.setdefault('lines',[])
+            n.setdefault('symbol','none');symbol_geometry(n['symbol'])
+            if n['symbol']!='none' and (n['w']<88 or n['h']<58):
+                raise ValueError(f"{n['id']}: electrical symbol needs a block at least 88 x 58")
             if n['kind'] not in ('normal','external','interface','power','power_external','reference','annotation','optional'):
                 raise ValueError('Unknown node kind: '+n['kind'])
         for g in page['groups']:
@@ -169,7 +175,7 @@ def text_layout(n):
         if not text:
             if n['model'] or n['lines']:y+=3
             continue
-        inset=56 if bold else 18
+        inset=72 if bold and n.get('symbol','none')!='none' else 18
         for line in wrap(text,n['w']-inset-18,size,bold):
             layout.append((line,n['x']+inset,y,size,bold,COL[color]));y+=size*1.16
         y+=3
@@ -322,12 +328,11 @@ def svg(d,index):
         layer=element(content,'g',{'class':f'diagram-node domain-{domain} kind-{n["kind"]}','data-node':n['id'],'role':'button','tabindex':'0','aria-label':n['title']})
         element(layer,'title').text=n['title']+' · '+n['model']
         rect(layer,n['x'],n['y'],n['w'],n['h'],*node_style(n),css='node-card')
-        rect(layer,n['x']+15,n['y']+14,29,29,COL['node'],COL[domain],r=7,css='node-icon-bg')
-        icon=element(layer,'g',{'class':'node-icon'},transform=f'translate({n["x"]+22} {n["y"]+21})')
-        element(icon,'rect',x=0,y=0,width=15,height=15,rx=2)
-        for offset in (4,10):
-            for x1,y1,x2,y2 in [(-4,offset,0,offset),(15,offset,19,offset),(offset,-4,offset,0),(offset,15,offset,19)]:
-                element(icon,'line',x1=x1,y1=y1,x2=x2,y2=y2)
+        if n['symbol']!='none':
+            icon=element(layer,'g',{'class':'node-symbol','data-symbol':n['symbol'],'aria-hidden':'true',
+                'fill':'none','stroke':COL[domain],'stroke-width':str(SYMBOL_STROKE),'stroke-linejoin':'round',
+                'font-family':FONT_FAMILY},transform=f'translate({n["x"]+16} {n["y"]+14})')
+            svg_elements(icon,n['symbol'],svg_ns)
         for item in text_layout(n):
             css='text-ink' if item[4] else 'text-muted' if item[-1]==COL['muted'] else 'domain-text'
             text(layer,item,css).text=item[0]
@@ -382,11 +387,8 @@ def draw_pdf(d,index,c):
         c.setFont(FONT_BOLD,22);c.setFillColor(HexColor(COL['muted']));c.drawString(g['x']+28,H-g['y']-11,g['title'])
     for n in d['nodes']:
         rect(n['x'],n['y'],n['w'],n['h'],*node_style(n))
-        color=COL[category(n)];rect(n['x']+15,n['y']+14,29,29,COL['node'],color)
-        x,y=n['x']+22,n['y']+21
-        c.setLineWidth(1.8);c.setStrokeColor(HexColor(color));c.roundRect(x,H-y-15,15,15,2,fill=0,stroke=1)
-        for offset in (4,10):
-            for x1,y1,x2,y2 in [(-4,offset,0,offset),(15,offset,19,offset),(offset,-4,offset,0),(offset,15,offset,19)]:c.line(x+x1,H-y-y1,x+x2,H-y-y2)
+        color=COL[category(n)];c.setStrokeColor(HexColor(color));c.setFillColor(HexColor(color))
+        pdf_symbol(c,n['symbol'],n['x']+16,n['y']+14,H,FONT_BOLD)
     for e in d['edges']:
         c.setStrokeColor(HexColor(COL[e['kind']]));c.setFillColor(HexColor(COL[e['kind']]));c.setLineWidth(LINE_WIDTH);c.setLineCap(0);c.setLineJoin(1);c.setDash([10,7] if e['dash'] else [])
         shaft=shaft_points(e)
@@ -415,17 +417,25 @@ def drawio():
         model=ET.SubElement(diagram,'mxGraphModel',dx='1600',dy='1200',grid='1',page='1',pageScale='1',pageWidth='1600',pageHeight='1200',background=COL['bg'])
         root=ET.SubElement(model,'root');ET.SubElement(root,'mxCell',id='0');ET.SubElement(root,'mxCell',id='1',parent='0')
         seq=0
-        def cell(value,x,y,w,h,style,id=None):
+        def cell(value,x,y,w,h,style,id=None,parent='1',**attrs):
             nonlocal seq
             seq+=1
-            e=ET.SubElement(root,'mxCell',id=('n-'+id) if id else 'x'+str(seq),value=value,style=style,vertex='1',parent='1')
+            e=ET.SubElement(root,'mxCell',id=('n-'+id) if id else 'x'+str(seq),value=value,style=style,vertex='1',parent=parent,**attrs)
             ET.SubElement(e,'mxGeometry',x=str(x),y=str(y),width=str(w),height=str(h),**{'as':'geometry'})
         for g in d['groups']:
             cell(g['title'],g['x'],g['y'],g['w'],g['h'],f"rounded=1;arcSize=4;whiteSpace=wrap;html=0;fillColor={g['fill']};strokeColor={COL['line']};strokeWidth=2.2;fontColor={COL['muted']};fontSize=25;align=left;verticalAlign=top;spacing=15;dashed={int(g['dash'])};fontFamily={FONT_FAMILY};",g['id'])
         for n in d['nodes']:
             fill,stroke,dash=node_style(n)
-            value='\n'.join([n['title']]+([n['model']] if n['model'] else [])+n['lines'])
-            cell(value,n['x'],n['y'],n['w'],n['h'],f"rounded=1;arcSize=4;whiteSpace=wrap;html=0;fillColor={fill};strokeColor={stroke};strokeWidth=2.2;fontColor={COL['ink']};fontSize=23;fontFamily={FONT_FAMILY};align=left;verticalAlign=middle;spacing=15;dashed={int(dash)};",n['id'])
+            cell('',n['x'],n['y'],n['w'],n['h'],f"rounded=1;arcSize=4;whiteSpace=wrap;html=0;fillColor={fill};strokeColor={stroke};strokeWidth=2.2;dashed={int(dash)};",n['id'])
+            parent='n-'+n['id']
+            if n['symbol']!='none':
+                cell('',16,14,SYMBOL_WIDTH,SYMBOL_HEIGHT,
+                     f"shape={drawio_shape(n['symbol'])};fillColor=none;strokeColor={stroke};strokeWidth={SYMBOL_STROKE};fontColor={stroke};fontFamily={FONT_FAMILY};",
+                     parent=parent,connectable='0',**{'data-symbol':n['symbol']})
+            for text,x,y,size,bold,color in text_layout(n):
+                cell(text,x-n['x'],y-n['y'],measure(text,size,bold)+8,size*1.25,
+                     f"text;html=0;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacing=0;whiteSpace=wrap;fontFamily={FONT_FAMILY};fontSize={size};fontColor={color};fontStyle={int(bold)};",
+                     parent=parent,connectable='0')
         for j in d['junctions']:
             cell('',j['x']-5,j['y']-5,10,10,f"ellipse;fillColor={COL[j['kind']]};strokeColor=none;",j['id'])
         for i,e in enumerate(d['edges']):

@@ -48,6 +48,10 @@ npx skills add zoujinlin/schematic-to-blocks -g --skill schematic-hardware-diagr
 
 数据、控制、电源和基准采用不同颜色。电源为红色，图例文字与线路颜色一致；实心箭头尖端直接连接功能块边界。
 
+模块标识按实际电路功能选取。放大级使用增益三角形，运放标出正、反相输入；ADC／DAC 使用 A/D、D/A 转换标识；数字隔离使用隔离屏障，DC/DC 使用直流变换标识，连接器使用接点符号。基准与控制器采用 REF、CTRL 功能标识。
+
+符号由原理图和器件资料确定，随语言和主题保持一致。HTML、SVG、PDF 与 draw.io 共用矢量定义；draw.io 中符号随模块移动，并可编辑形状。未确认功能或缺少适用符号时保留文字说明。具体位号、引脚、通道方向和隔离等级仍以电路证据为准。[符号选用规则与完整列表](skills/schematic-hardware-diagrams/references/electrical-symbols.md)。
+
 ## 查看与导出
 
 同一份图形数据可切换深浅主题。平移、缩放、聚焦与连接追踪均在本地执行。
@@ -126,7 +130,7 @@ python skills/schematic-hardware-diagrams/scripts/schematic.py deliver work/diag
 |---|---|
 | 提取证据 | 记录源文件 SHA256、器件、图页／符号／网络定位 |
 | 分析电路 | 区分原理图事实、数据手册依据、工程推断与待确认项 |
-| 编写图形数据 | 用 JSON 描述功能块、接口、供电、证据和布局 |
+| 编写图形数据 | 用 JSON 描述功能块、电气符号、接口、供电、证据和布局 |
 | 校验图形 | 检查端点、穿框、分支、文字溢出、标签避让和字形 |
 | 交付与复核 | 发布独立 HTML 及所需格式，再检查实际图面 |
 
@@ -141,7 +145,7 @@ npm ci --ignore-scripts
 python -m unittest discover -s skills/schematic-hardware-diagrams/tests -v
 ```
 
-Node.js 和 DOM 解析库仅用于开发测试，生成的 HTML 没有外部 JavaScript／CSS 依赖。测试覆盖格式读取、证据、语言、连接几何、主题、缩放、平移、聚焦、完整图形导出和失败恢复。通过自动校验后仍需检查图面与电气依据。
+Node.js 和 DOM 解析库仅用于开发测试，生成的 HTML 没有外部 JavaScript／CSS 依赖。测试覆盖格式读取、证据、语言、功能符号选择与跨格式导出、连接几何、主题、缩放、平移、聚焦、完整图形导出和失败恢复。通过自动校验后仍需检查图面与电气依据。
 
 ## 许可
 
