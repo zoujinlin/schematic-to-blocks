@@ -40,7 +40,7 @@ jobs:
         run: npm run test:layout
       - name: Save browser layout screenshots
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: viewer-layout-review
           path: output/layout-review/

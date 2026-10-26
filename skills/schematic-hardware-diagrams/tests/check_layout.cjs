@@ -42,8 +42,9 @@ async function inViewport(page,selector,{vertical=true}={}){
       const context=await browser.newContext({reducedMotion:'reduce'});
       // Delivered HTML is self-contained. No source documents or online services.
       await context.route('**/*',route=>route.abort());
-      const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+      const errors=[];
       for(const [width,height] of sizes){
+        const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
         await page.setViewportSize({width,height});
         await page.setContent(markup,{waitUntil:'load'});
         assert.equal(await page.locator('#pages option').count(),13);
@@ -75,6 +76,7 @@ async function inViewport(page,selector,{vertical=true}={}){
         await noHorizontalOverflow(page,`${locale} ${width} after interactions`);
         await page.screenshot({path:path.join(out,`${locale}-${width}-dark.png`),fullPage:true});
         results.push({locale,width,height,pages:13,ok:true});
+        await page.close();
       }
       assert.deepEqual(errors,[]);await context.close();
     }
