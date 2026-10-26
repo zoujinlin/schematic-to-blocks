@@ -35,7 +35,8 @@ async function inViewport(page,selector,{vertical=true}={}){
 }
 (async()=>{
   fs.mkdirSync(out,{recursive:true});
-  const browser=await chromium.launch(),results=[];
+  const launch=process.env.SCHEMATIC_BROWSER_CHANNEL?{channel:process.env.SCHEMATIC_BROWSER_CHANNEL}:{};
+  const browser=await chromium.launch(launch),results=[];
   try{
     for(const locale of ['en','zh-Hans']){
       const {markup,data}=fixture(locale);

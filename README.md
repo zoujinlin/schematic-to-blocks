@@ -149,6 +149,8 @@ npm run test:layout
 
 Node.js、DOM 解析库和 Playwright 仅用于开发测试，生成的 HTML 没有外部 JavaScript／CSS 依赖。测试覆盖格式读取、证据、语言、功能符号选择与跨格式导出、连接几何、主题、缩放、平移、聚焦、完整图形导出和失败恢复。浏览器布局测试使用 13 个长标题模块，检查 320–1920 px 视口中的导航、搜索、说明栏和导出菜单，并保存深浅主题截图。通过自动校验后仍需检查图面与电气依据。
 
+CI 复用运行环境中的 Google Chrome。本地已有 Chrome 时，可设置 `SCHEMATIC_BROWSER_CHANNEL=chrome`，跳过 Chromium 下载。
+
 ## 许可
 
 [MIT](LICENSE)。原理图、数据手册、字体和 OCR 模型适用各自许可。

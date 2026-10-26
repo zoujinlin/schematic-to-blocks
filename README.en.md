@@ -149,6 +149,8 @@ npm run test:layout
 
 Node.js, the DOM parser and Playwright are development-only. Generated HTML requires no external JavaScript or CSS. Tests cover format extraction, evidence, language, function-specific symbols across export formats, geometry, themes, zoom, pan, focus, full-graph export and failed-delivery recovery. Browser layout tests use 13 modules with long titles at viewport widths from 320 to 1920 px, checking navigation, search, details and the export menu, and saving dark/light screenshots. Automated checks still require visual and electrical review.
 
+CI reuses the runner's Google Chrome. Set `SCHEMATIC_BROWSER_CHANNEL=chrome` to use an existing local Chrome installation and skip downloading Chromium.
+
 ## License
 
 [MIT](LICENSE). Schematics, datasheets, fonts and OCR models retain their respective licenses.
