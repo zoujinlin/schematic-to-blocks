@@ -3,7 +3,7 @@ name: schematic-hardware-diagrams
 description: Analyze electronic schematics from PDF, scanned images, KiCad, EAGLE XML or EasyEDA Std JSON, then create a hardware overview and module block diagrams explaining device models, operating principles, functions, interfaces and power domains. Use for hardware project onboarding and diagram revisions; adapt output language to the user's request.
 license: MIT
 metadata:
-  version: "0.1.1"
+  version: "0.1.2"
 ---
 
 # Schematic Hardware Diagrams
@@ -56,6 +56,7 @@ Visual defaults, adjustable to the user's request:
 - Orthogonal connections and prominent solid triangular heads. The pointed apex meets the destination border; the shaft stops at the triangle base.
 - Bind each endpoint to a node/group border or explicit junction. Keep labels clear of lines, arrowheads, rectangles and text. Use dots for bus branches.
 - Keep readable type and spacing. Enlarge/rearrange blocks instead of truncating models, compressing prose or omitting a real connection.
+- Constrain the HTML shell to the viewport. Many modules or long translated titles must not push tools or details off screen. Keep the module selector available, scroll tabs within their own row, and wrap header controls; verify desktop and narrow layouts at normal browser zoom.
 
 ## Validate, deliver and inspect
 

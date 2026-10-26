@@ -61,7 +61,7 @@ npx skills add zoujinlin/schematic-to-blocks -g --skill schematic-hardware-diagr
 | ![深色架构图](docs/overview.dark.zh-Hans.png) | ![浅色架构图](docs/overview.light.zh-Hans.png) |
 
 - **查看路径**：选择功能块，查看直接相连、上游或下游的已记录连接；也可选择连线核对接口和证据。
-- **浏览模块**：使用模块导航或搜索定位器件、型号和网络。
+- **浏览模块**：常驻下拉列表可直接选择任意模块；宽屏标签在导航栏内滚动，切换时自动显示当前模块。标题与工具栏随窗口换行，搜索和器件说明在窄屏中移至画布下方，无需缩小整个页面。
 - **演示与动效**：切换演示视图和连接动效；遵循系统的减少动态效果设置。
 - **导出结果**：HTML 内可导出当前主题的完整 SVG／PNG，或打印当前页；命令行可生成多页 PDF、draw.io 和逐页图像。
 - **继续编辑**：保留 JSON 图形源文件，用相同节点标识进行后续修改。
@@ -143,9 +143,11 @@ python skills/schematic-hardware-diagrams/scripts/schematic.py deliver work/diag
 ```sh
 npm ci --ignore-scripts
 python -m unittest discover -s skills/schematic-hardware-diagrams/tests -v
+npx playwright install --with-deps chromium
+npm run test:layout
 ```
 
-Node.js 和 DOM 解析库仅用于开发测试，生成的 HTML 没有外部 JavaScript／CSS 依赖。测试覆盖格式读取、证据、语言、功能符号选择与跨格式导出、连接几何、主题、缩放、平移、聚焦、完整图形导出和失败恢复。通过自动校验后仍需检查图面与电气依据。
+Node.js、DOM 解析库和 Playwright 仅用于开发测试，生成的 HTML 没有外部 JavaScript／CSS 依赖。测试覆盖格式读取、证据、语言、功能符号选择与跨格式导出、连接几何、主题、缩放、平移、聚焦、完整图形导出和失败恢复。浏览器布局测试使用 13 个长标题模块，检查 320–1920 px 视口中的导航、搜索、说明栏和导出菜单，并保存深浅主题截图。通过自动校验后仍需检查图面与电气依据。
 
 ## 许可
 

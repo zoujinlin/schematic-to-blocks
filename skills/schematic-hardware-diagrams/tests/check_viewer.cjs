@@ -31,9 +31,13 @@ for(const end of [false,true])for(const both of [false,true]){
   assert.equal(reach(page,'a','down').ids.has('b'),end||!both);assert.equal(reach(page,'b','down').ids.has('a'),both||!end);
 }
 assert.equal($('pages').children.length,payload.pages.length);assert.equal($('up').disabled,true);
+assert.equal($('export-menu').parentElement,$('export').parentElement);
 let count=0;
 for(let index=0;index<payload.pages.length;index++){
   $('pages').value=String(index);$('pages').dispatchEvent(new window.Event('change'));
+  assert.equal($('pages').title,payload.pages[index].title);
+  assert.equal($('module-nav').querySelector('[aria-current="page"]').dataset.page,String(index));
+  assert($('pages').querySelector(`option[value="${index}"]`).textContent.includes(payload.pages[index].title));
   assert.equal(nodes().length,payload.pages[index].nodes.length);
   for(const node of nodes()){
     click(node);const record=payload.pages[index].nodes.find(n=>n.id===node.dataset.node);
@@ -48,6 +52,7 @@ $('pages').value='0';$('pages').dispatchEvent(new window.Event('change'));
 const power=nodes().find(n=>n.dataset.node==='power');
 if(power){click(power);click($('down'));for(const id of ['power','acquisition','isolation'])assert(!nodes().find(n=>n.dataset.node===id).classList.contains('dim'));assert(nodes().find(n=>n.dataset.node==='sensor').classList.contains('dim'))}
 const initialTheme=document.documentElement.dataset.theme;click($('theme'));assert.notEqual(document.documentElement.dataset.theme,initialTheme);assert.equal($('canvas').querySelector('svg').dataset.theme,document.documentElement.dataset.theme);
+click($('export'));assert.equal($('export-menu').hidden,false);assert.equal($('export').getAttribute('aria-expanded'),'true');click($('export'));assert.equal($('export-menu').hidden,true);
 const initialMotion=$('canvas').querySelector('svg').dataset.motion;click($('motion'));assert.notEqual($('canvas').querySelector('svg').dataset.motion,initialMotion);
 click($('fit'));const fitted=view();click($('zoom-in'));assert(view()[2]<fitted[2]);click($('zoom-out'));assert(Math.abs(view()[2]-fitted[2])<1e-8);
 click($('present'));assert(document.body.classList.contains('present'));click($('present'));assert(!document.body.classList.contains('present'));

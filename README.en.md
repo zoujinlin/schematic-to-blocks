@@ -61,7 +61,7 @@ One authored diagram, two themes. Pan, zoom, focus and trace relationships local
 | ![Dark architecture](docs/overview.dark.en.png) | ![Light architecture](docs/overview.light.en.png) |
 
 - **Follow connections:** select a block for its direct, upstream or downstream authored relationships. Select an edge to inspect its endpoints and evidence.
-- **Find a device:** navigate modules or search models, components and nets.
+- **Find a device:** choose any module from the persistent selector, or use the scrollable tabs on wide screens. The selected tab stays in view. Header controls wrap, and narrow screens place search and device details below the canvas; no page zoom adjustment is needed.
 - **Present the diagram:** switch presentation mode and connection motion; reduced-motion preferences are respected.
 - **Export the result:** download the complete current-theme SVG/PNG or print the current page. The CLI also produces multipage PDF, draw.io and page images.
 - **Keep editing:** retain the JSON source and stable node identifiers for targeted revisions.
@@ -143,9 +143,11 @@ See [localization and font rules](skills/schematic-hardware-diagrams/references/
 ```sh
 npm ci --ignore-scripts
 python -m unittest discover -s skills/schematic-hardware-diagrams/tests -v
+npx playwright install --with-deps chromium
+npm run test:layout
 ```
 
-Node.js and the DOM parser are development-only. Generated HTML requires no external JavaScript or CSS. Tests cover format extraction, evidence, language, function-specific symbols across export formats, geometry, themes, zoom, pan, focus, full-graph export and failed-delivery recovery. Automated checks still require visual and electrical review.
+Node.js, the DOM parser and Playwright are development-only. Generated HTML requires no external JavaScript or CSS. Tests cover format extraction, evidence, language, function-specific symbols across export formats, geometry, themes, zoom, pan, focus, full-graph export and failed-delivery recovery. Browser layout tests use 13 modules with long titles at viewport widths from 320 to 1920 px, checking navigation, search, details and the export menu, and saving dark/light screenshots. Automated checks still require visual and electrical review.
 
 ## License
 

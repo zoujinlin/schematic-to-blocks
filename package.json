@@ -1,12 +1,16 @@
 {
   "name": "schematic-to-blocks-dev",
   "private": true,
-  "version": "0.1.0",
-  "description": "Development-only DOM tests for the standalone hardware viewer",
+  "version": "0.1.2",
+  "description": "Development-only DOM and browser layout tests for the standalone hardware viewer",
+  "scripts": {
+    "test:layout": "node skills/schematic-hardware-diagrams/tests/check_layout.cjs"
+  },
   "engines": {
     "node": ">=20"
   },
   "devDependencies": {
-    "linkedom": "0.18.14"
+    "linkedom": "0.18.14",
+    "playwright": "1.64.1"
   }
 }

@@ -17,11 +17,14 @@
   <div class="actions" role="toolbar">
     <button id="theme" type="button"></button><button id="motion" type="button" aria-pressed="false"></button>
     <button id="present" type="button"></button><button id="reset" type="button"></button>
-    <button id="export" type="button" aria-expanded="false" aria-controls="export-menu"></button>
+    <div class="export-actions">
+      <button id="export" type="button" aria-expanded="false" aria-controls="export-menu"></button>
+      <div id="export-menu" class="export-menu" hidden><button id="exportSvg" type="button"></button><button id="exportPng" type="button"></button><button id="print" type="button"></button></div>
+    </div>
   </div>
 </header>
 <p class="summary-line" id="intro"></p>
-<div class="viewbar"><nav class="module-nav" id="module-nav" aria-label="@@PAGES@@"></nav><select id="pages" aria-label="@@PAGES@@"></select><span id="counts" class="counts"></span></div>
+<div class="viewbar"><select id="pages" aria-label="@@PAGES@@"></select><nav class="module-nav" id="module-nav" aria-label="@@PAGES@@"></nav><span id="counts" class="counts"></span></div>
 <main class="workspace">
   <section class="stage" aria-label="@@CANVAS@@">
     <div id="canvas"></div>
@@ -36,7 +39,6 @@
   </aside>
 </main>
 <footer class="statusbar"><p id="status"></p><p id="hint"></p></footer>
-<div id="export-menu" class="export-menu" hidden><button id="exportSvg" type="button"></button><button id="exportPng" type="button"></button><button id="print" type="button"></button></div>
 <script type="application/json" id="document">@@DATA@@</script>
 <script>@@SCRIPT@@</script>
 </body>

@@ -11,8 +11,8 @@ $('zoom-in').title=ui.zoomIn;$('zoom-out').title=ui.zoomOut;$('fit').title=ui.fi
 $('motion').title=reduced?ui.reduced:ui.motion;$('motion').disabled=reduced;
 $('pages').setAttribute('aria-label',ui.pages);
 doc.pages.forEach((page,index)=>{
-  const option=document.createElement('option');option.value=String(index);option.textContent=page.title;$('pages').append(option);
-  const button=document.createElement('button');button.className='nav-page';button.dataset.page=String(index);
+  const option=document.createElement('option');option.value=String(index);option.textContent=String(index+1).padStart(2,'0')+' · '+page.title;$('pages').append(option);
+  const button=document.createElement('button');button.className='nav-page';button.dataset.page=String(index);button.title=page.title;
   const number=document.createElement('span'),title=document.createElement('span');number.textContent=String(index+1).padStart(2,'0');title.textContent=page.title;
   button.append(number,title);button.onclick=()=>{pageIndex=index;showPage()};$('module-nav').append(button);
 });
@@ -85,7 +85,11 @@ function showLegend(){
 }
 function showPage(){
   selected=null;const page=doc.pages[pageIndex];$('canvas').innerHTML=doc.svg[pageIndex];svgRoot().setAttribute('role','group');$('pages').value=String(pageIndex);document.body.dataset.details='open';
-  $('module-nav').querySelectorAll('button').forEach(e=>e.setAttribute('aria-current',Number(e.dataset.page)===pageIndex?'page':'false'));
+  $('module-nav').querySelectorAll('button').forEach(e=>{
+    const active=Number(e.dataset.page)===pageIndex;e.setAttribute('aria-current',active?'page':'false');
+    if(active)e.scrollIntoView?.({block:'nearest',inline:'nearest'});
+  });
+  $('pages').title=page.title;
   $('card-kind').textContent=(pageIndex?ui.module:ui.overview)+' / '+String(pageIndex+1).padStart(2,'0');$('card-title').textContent=page.title;$('summary').textContent=page.subtitle||'';$('details').replaceChildren();
   addSection(ui.reading,ui.select);addSection(ui.uncertainty,doc.unresolved);setActions(false);$('search').value='';$('status').textContent=ui.scope;
   $('counts').textContent=page.nodes.length+' '+ui.nodes+' / '+page.edges.length+' '+ui.connections;
