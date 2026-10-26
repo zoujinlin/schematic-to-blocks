@@ -81,4 +81,7 @@ async function inViewport(page,selector,{vertical=true}={}){
   }finally{await browser.close()}
   fs.writeFileSync(path.join(out,'results.json'),JSON.stringify({ok:true,results},null,2));
   console.log(JSON.stringify({ok:true,cases:results.length,modules:13,checks:['no document overflow','module selector','active tab visibility','search and details','wrapped header controls','anchored export menu','dark and light themes']}));
-})().catch(error=>{console.error(error);process.exitCode=1});
+})().catch(error=>{
+  const message=String(error.stack||error).replaceAll('%','%25').replaceAll('\r','%0D').replaceAll('\n','%0A');
+  console.error('::error title=Responsive viewer layout::'+message);process.exitCode=1;
+});
